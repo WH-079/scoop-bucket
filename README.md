@@ -14,5 +14,5 @@
    scoop bucket add my-bucket https://github.com/WH-079/scoop-bucket.git
 
 ```text
-
+   scoop install my-bucket/lceda-pro
 ```
