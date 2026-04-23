@@ -11,8 +11,8 @@
 1. 添加此仓库：
 
    ```powershell
-   scoop bucket add my-bucket https://github.com/WH-079/scoop-bucket.git
-   ```
-   ```powershell
-   scoop install my-bucket/lceda-pro
-   ```
+   scoop bucket add my-bucket <你的GitHub仓库地址>
+
+```text
+
+```

@@ -1,0 +1,68 @@
+{
+    "version": "3.2.121",
+    "description": "嘉立创 EDA 专业版。",
+    "homepage": "https://pro.lceda.cn/",
+    "license": "Freeware",
+    "url": "https://image.lceda.cn/files/lceda-pro-windows-x64-3.2.121.exe",
+    "hash": "90085231e42dabfac8241d72cf8fde22035b2c13c60ff58e0d0ab6730d8d5d1d",
+    "innosetup": true,
+    "installer": {
+        "script": [
+            "$InstallDir = \"$dir\"",
+            "$UserDataDir = \"$persist_dir\"",
+            "$TargetDataDir = \"$env:USERPROFILE\\Documents\\LCEDA-Pro\"",
+            "if (Test-Path $TargetDataDir) {",
+            "    ensure \"$UserDataDir\\backup_if_exists\" | Out-Null",
+            "    Move-Item -Path \"$TargetDataDir\\*\" -Destination \"$UserDataDir\\\" -Force -ErrorAction SilentlyContinue",
+            "}",
+            "if (!(Test-Path $TargetDataDir)) {",
+            "    New-Item -ItemType Directory -Path \"$UserDataDir\" -Force | Out-Null",
+            "    cmd /c mklink /J \"$TargetDataDir\" \"$UserDataDir\" | Out-Null",
+            "}",
+            "$ActivationFile = \"$UserDataDir\\lceda-pro-activation.txt\"",
+            "if (!(Test-Path $ActivationFile)) {",
+            "    \"\" | Out-File -FilePath $ActivationFile -Encoding utf8",
+            "    Write-Host \"提示：首次启动后请手动导入激活文件或复制激活码。\" -ForegroundColor Yellow",
+            "}"
+        ]
+    },
+    "uninstaller": {
+        "script": [
+            "$UserDataDir = \"$persist_dir\"",
+            "$TargetDataDir = \"$env:USERPROFILE\\Documents\\LCEDA-Pro\"",
+            "if (Test-Path $TargetDataDir) {",
+            "    $Item = Get-Item $TargetDataDir -ErrorAction SilentlyContinue",
+            "    if ($Item.LinkType -eq \"Junction\") {",
+            "        Remove-Item $TargetDataDir -Force",
+            "    }",
+            "}",
+            "if (Test-Path $UserDataDir) {",
+            "    Remove-Item -Path $UserDataDir -Recurse -Force",
+            "    Write-Host \"所有用户数据已从 $UserDataDir 中清除。\" -ForegroundColor Yellow",
+            "}"
+        ]
+    },
+    "persist": [
+        "lceda-pro-activation.txt",
+        "libraries",
+        "projects",
+        "cache"
+    ],
+    "shortcuts": [
+        [
+            "lceda-pro.exe",
+            "嘉立创EDA专业版"
+        ]
+    ],
+    "checkver": {
+        "url": "https://pro.lceda.cn/page/download",
+        "regex": "/files/lceda-pro-windows-x64-([\\d.]+)\\.exe"
+    },
+    "autoupdate": {
+        "url": "https://image.lceda.cn/files/lceda-pro-windows-x64-$version.exe",
+        "hash": {
+            "url": "$url",
+            "type": "sha256"
+        }
+    }
+}
